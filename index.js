@@ -37,3 +37,4 @@ function getTeamStream (arr, cb) {
   })
 }
 
+module.exports = getTeamStream
