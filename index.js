@@ -1,10 +1,6 @@
 var request = require('request') 
   , cheerio = require('cheerio') 
-  , url = 'http://bleacherreport.com/front_page/user_stream_teams?teams=philadelphia-eagles%2Bdallas-cowboys%2Bchicago-bulls&json=true'
-  , options = { 
-      uri: url
-    , method: "GET" 
-   }
+  , base = 'http://bleacherreport.com/front_page/user_stream_teams'
 
 function buildArticle (title, source, imageLink) { 
   return { 
@@ -14,13 +10,28 @@ function buildArticle (title, source, imageLink) {
   } 
 }
 
-request(options, function (err, res, body) { 
-  body = JSON.parse(body)
-  $ = cheerio.load(body.one_stream)
-  $('.uber-stream-container .body .uber-stream-items #team-stream-carousel ul li').each(function(i, elem) { 
-    var img = $(this).find('.image-with-caption img').attr('data-defer-src')
-      , headline = $(this).find('h2').text().trim()
-      , source = $(this).find('.credit').text()
-    console.log(JSON.stringify(buildArticle(headline, source, img)))
+function buildRequestOptions(arr)  {
+  var teams = '?teams='  
+  teams = teams + arr.join('+') + '&json=true'
+  base = base + teams
+  return options = { 
+    uri: base,
+    method: "GET"
+  } 
+} 
+
+function getTeamStream (arr, cb) {  
+  var options = buildRequestOptions(arr)
+  request(options, function (err, res, body) { 
+    body = JSON.parse(body)
+    $ = cheerio.load(body.one_stream)
+    $('.uber-stream-container .body .uber-stream-items #team-stream-carousel ul li').each(function(i, elem) { 
+      var img = $(this).find('.image-with-caption img').attr('data-defer-src')
+        , headline = $(this).find('h2').text().trim()
+        , source = $(this).find('.credit').text()
+      console.log(JSON.stringify(buildArticle(headline, source, img)))
+    })
   })
-})
+}
+
+getTeamStream(['philadelphia-eagles', 'chicago-bulls', 'los-angeles-lakers'])
