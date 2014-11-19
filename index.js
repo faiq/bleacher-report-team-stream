@@ -22,16 +22,18 @@ function buildRequestOptions(arr)  {
 
 function getTeamStream (arr, cb) {  
   var options = buildRequestOptions(arr)
+    , retArr = []
   request(options, function (err, res, body) { 
+    if (err) cb(err, null)
     body = JSON.parse(body)
     $ = cheerio.load(body.one_stream)
     $('.uber-stream-container .body .uber-stream-items #team-stream-carousel ul li').each(function(i, elem) { 
       var img = $(this).find('.image-with-caption img').attr('data-defer-src')
         , headline = $(this).find('h2').text().trim()
         , source = $(this).find('.credit').text()
-      console.log(JSON.stringify(buildArticle(headline, source, img)))
+      retArr.push(buildArticle(headline, source, img))
     })
+    cb(null, retArr)
   })
 }
 
-getTeamStream(['philadelphia-eagles', 'chicago-bulls', 'los-angeles-lakers'])
