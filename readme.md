@@ -14,3 +14,4 @@ getTeamStream(['philadelphia-eagles', 'chicago-bulls', 'los-angeles-lakers'], fu
   })
 })
 ```
+Lisence is ISC
