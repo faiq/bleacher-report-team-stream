@@ -2,11 +2,12 @@ var request = require('request')
   , cheerio = require('cheerio') 
   , base = 'http://bleacherreport.com/front_page/user_stream_teams'
 
-function buildArticle (title, source, imageLink) { 
+function buildArticle (title, source, imageLink, articleLink) { 
   return { 
     title: title,
     source: source,
-    imageLink: imageLink
+    imageLink: imageLink, 
+    articleLink: articleLink
   } 
 }
 
@@ -30,8 +31,9 @@ function getTeamStream (arr, cb) {
     $('.uber-stream-container .body .uber-stream-items #team-stream-carousel ul li').each(function(i, elem) { 
       var img = $(this).find('.image-with-caption img').attr('data-defer-src')
         , headline = $(this).find('h2').text().trim()
+        , articleLink = $(this).find('h2 a').eq(1).attr('href')
         , source = $(this).find('.credit').text()
-      retArr.push(buildArticle(headline, source, img))
+      retArr.push(buildArticle(headline, source, img, articleLink))
     })
     cb(null, retArr)
   })
