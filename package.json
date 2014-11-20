@@ -1,6 +1,6 @@
 {
   "name": "br-team-stream",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "scrape team stream data from bleacher report",
   "main": "index.js",
   "scripts": {
