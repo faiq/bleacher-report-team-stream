@@ -4,12 +4,16 @@
   "description": "scrape team stream data from bleacher report",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=testing NODE_PATH=../ ../../node_modules/.bin/mocha -R spec test"
   },
   "author": "faiq",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^0.18.0",
     "request": "^2.48.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "nock": "^0.50.0"
   }
 }
